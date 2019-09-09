@@ -14,9 +14,9 @@ cv2.namedWindow("trackbars")
 cv2.createTrackbar("LH", 'trackbars', 0, 180, nothing)
 cv2.createTrackbar("LS", 'trackbars', 0, 255, nothing)
 cv2.createTrackbar("LV", 'trackbars', 0, 255, nothing)
-cv2.createTrackbar("UH", 'trackbars', 0, 180, nothing)
-cv2.createTrackbar("US", 'trackbars', 0, 255, nothing)
-cv2.createTrackbar("UV", 'trackbars', 0, 255, nothing)
+cv2.createTrackbar("UH", 'trackbars', 180, 180, nothing)
+cv2.createTrackbar("US", 'trackbars', 255, 255, nothing)
+cv2.createTrackbar("UV", 'trackbars', 255, 255, nothing)
 
 while True:
     ret, frame = cap.read()
@@ -33,9 +33,12 @@ while True:
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     lower_blue = np.array([lower_hue, lower_saturation, lower_value])
     upper_blue = np.array([upper_hue, upper_saturation, upper_value])
-    mask = cv2.inRange(hsv, lower_blue, upper_blue)
+    blur = cv2.GaussianBlur(hsv, (5, 5), 0)
+    erode = cv2.erode(blur, (5,5))
+    mask = cv2.inRange(erode, lower_blue, upper_blue)
 
     cv2.imshow("frame", frame)
+    # cv2.imshow("blur", blur)
     cv2.imshow("mask", mask)
 
     key = cv2.waitKey(1)
