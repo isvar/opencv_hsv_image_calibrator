@@ -1,12 +1,20 @@
 import cv2
 import numpy as np
-
+import time
 
 def nothing():
     pass
 
 
 cap = cv2.VideoCapture(0)
+
+
+while not cap.isOpened():
+    print("No se ha encontrado la camara")
+    time.sleep(1.0)
+else:
+    print("conectado")
+
 
 cv2.namedWindow("trackbars")
 
@@ -29,7 +37,7 @@ while True:
     upper_saturation = cv2.getTrackbarPos("US", "trackbars")
     upper_value = cv2.getTrackbarPos("UV", "trackbars")
 
-    # masking image with hsv
+    # masking image
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     lower_blue = np.array([lower_hue, lower_saturation, lower_value])
     upper_blue = np.array([upper_hue, upper_saturation, upper_value])
